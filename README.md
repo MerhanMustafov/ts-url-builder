@@ -1,10 +1,21 @@
 # ts-url-builder
-### Description
-This is a liblary that provides typed URL Builder and with little to no configuration
+<br />
 
-you can have a url builder tool that boost your dev process
+⚠️  ___This liblary is for Typescript projects___
 
-### Get started
+<br />
+
+
+
+
+## Description
+Welcome to the `ts-url-bulder` documentation !
+This is a library for url building that brings the best out of __typescript__ and combines that with __builder design pattern__ providing you with one of the best yet simple url builder tools out there. With little to no configuration you can start building strongly typed urls.
+
+<br />
+
+## Get started
+
 - Installation
 ```
  npm install ts-url-builder
@@ -13,19 +24,16 @@ you can have a url builder tool that boost your dev process
 ```typescript
 import { createUrlBuilderWith } from "ts-url-builder";
 ```
+## What is `createUrlBuilderWith`
+This is a function that accepts 2 arguments <br />
+1. `config` object which is ___required___
+2. `baseUrl` a string which is ___optional___
+<br />
+And returns an instance of the url builder.
 
-### Usage
-To start using the url builder you need to provide a config object as a first parameter to `createUrlBuilderWith` that contains your endpoints and the queries corresponding to them. This object should be structured in certain way.
+### `baseUrl`
+So lets start with the simple one, the base url. This is just a string passed as __second argument__ to `createUrlBuilderWith` and is __optional__. Given that the constraint is a string it can be anything so make sure that you are passing the right base url. __The only thing you should know is that a base url should NOT end with slash ("/")__.<br />
+⚠️ https://localhost:3001/ __is wrong__ <br />
+⚠️ https://localhost:3001 __is correct__
 
----
-#### Config object
-At the top level your config object should look like this
-```typescript
-const configObj = {
-     0: P0,
-     1: P1,
-     2: P2,
-     3: P3,
-}
-```
-Do not pay attention to the 0 key in the object for now i will explain that a little down the page.
+### `config` object
