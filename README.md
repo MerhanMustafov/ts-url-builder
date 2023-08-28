@@ -6,7 +6,10 @@
 <br />
 
 ## Constraints
-⬇️ __The url builder supports up to 7 endpoints (including)__
+⬇️ __The url builder supports up to 7 endpoints (including)__ <br />
+⬇️ __Only supports ES6 import/export module__
+
+<br />
 
 
 ## Description
@@ -40,46 +43,64 @@ So lets start with the simple one, the base url. This is just a string passed as
 
 ## `config` object
 `config` is just an object with a specific structure. <br />
-#### About Paths:
+### `config` object Structure
+```typescript
+const config = {
+	0:{
+		//params of the base url
+		// ...
+	},
+	1:{
+		//first endpoints
+		// ...
+	},
+	2: {
+		// second endpoints
+		// ...
+	},
+	3:{
+		// third endpoints
+		// ...
+	},
+	// ... 
+	7:{
+		// IMPORTANT! 7 (including) is the maximum endpoints allowed
+	}
+};
+```
+### EXAMPLES:
+<br />
+
+#### Path section
 Read carefully throgh the comments and you will understand the __path section__ of the library and how it works.
 ```typescript
-export const config = {
+const config = {
      1: {
           // In here the keys are the first endpoints
           // for example
-          // https://localhost:3001/timezone
-          // https://localhost:3001/leagues
+          // http://localhost:3001/timezone
+          // http://localhost:3001/leagues
           // ...
           timezone: null,
           countries: null,
           leagues: null,
-          teams: null,
           odds: null,
      },
      // IMPORTANT! only those paths that have second path should be moved in from 1:{...} to 2:{...}
      2: {
           leagues: {
                // The most inner key is the second endpoint
+               // http://localhost:3001/leagues/seasons
                seasons: null,
-               // https://localhost:3001/leagues/seasons
           },
-          teams: {
-               // The most inner key is the second endpoint
-               statistics: null,
-               // https://localhost:3001/teams/statistics
-               season: null,
-               // https://localhost:3001/teams/season
-          },
+         
           odds: {
                // The most inner key is the second endpoint
+               // http://localhost:3001/odds/live
                live: null,
-               // https://localhost:3001/odds/live
                mapping: null,
-               // https://localhost:3001/odds/mapping
                bookmakers: null,
-               // https://localhost:3001/odds/bookmakers
                bets: null,
-               // https://localhost:3001/odds/bets
           },
      },
     // IMPORTANT! only those paths that have third path should be moved in from 2:{...} to 3:{...}
@@ -87,10 +108,178 @@ export const config = {
           odds: {
                live: {
                     // The most inner key is the second endpoint
+                    // http://localhost:3001/odds/live/bets
                     bets: null,
-                    // https://localhost:3001/odds/live/bets
                },
           },
      },
 };
+```
+<br />
+
+#### Query section:
+Read carefully through the comments and you will understand the __query section__ of the library and how it works.
+
+```typescript
+const config = {
+     1: {
+          timezone: null,
+          countries: {
+               // These are the queries for the first endpoint /countries
+               // if you do not have query just give null as value to the countries
+               //http://localhost:3001/countries?name="Joe"
+               name: "" as string,
+               code: "" as string, 
+               // ...
+               search: "" as string, 
+               // ...
+          },
+          odds: {
+               fixture: 1 as number, 
+               league: 1 as number, 
+          },
+     },
+     2: {
+          odds: {
+               // This is the second endpoint
+               live: {
+                    // These are the queries for the second endpoint /odds/live?fixture=123
+                    fixture: 1 as number,
+                    // ...
+                    league: 1 as number,
+                    // ...
+                    bet: 1 as number,
+               },
+               mapping: {
+                    page: 1 as number,
+               },
+               bookmakers: {
+                    id: 1 as number,
+                    search: "" as string,
+               },
+               bets: {
+                    id: 1 as number,
+                    search: "" as string,
+               },
+          },
+     },
+     3: {
+          odds: {
+               live: {
+                    // This is the third endpoint
+                    bets: {
+                         // These are the queries for the third endpoint /odds/live/bets?id=123&search="Param"
+                         id: 1 as number,
+                         search: "" as string,
+                    },
+               },
+          },
+     },
+};
+```
+<br />
+
+#### What about if i have query in my base url
+You need to add 0: {...} inside your config object where you will keep your param keys for the base URL
+
+```typescript
+const config = {
+	0:{
+		// These are the queries for the base url if there are any
+		// If your base URL have a query you need to create 0 key and pass the queries as
+		// key value pairs as shown below
+		// http://localhost:3001?name="Joe"
+		name: "" as string,
+		age: 1 as number
+	},
+     // IMPORTANT! Remember that the createUrlBuilderWith will not work if you do NOT have 1: {...} in the config object
+};
+```
+<br />
+
+## Usage
+When you create the config and pass it to `createUrlBuilderWith(config, baseUrl)` you will get urlBuilder instance. <br />
+The `urlBuilder` instace have 4 methods 
+1. `new` you __should always start with__ `new` method - it resets everything and gives you the opportunity to create one instance and use it wherever you want in your code
+2. `setPath` this sets the path and can be chained up to 7 times (including) if you chain this method more than 7 it will just not work and you will not have a typing
+3. `setQuery` this sets the query for the current path
+4. `build` this is called at the end and returns the url string if the base url is not provided in `createUrlBuilderWith` then tis will return only the endpoint part else it will return the whole URL
+
+##### Example
+```typescript
+import { createUrlBuilderWith } from "ts-url-builder";
+
+const urlBuilder = createUrlBuilderWith(config);
+urlBuilder.new().setPath("odds").setPath("live").setQuery("fixture", 123).build();
+```
+
+## Template to get you started
+After you have installed the library you can take that code below and start playing with it
+
+```typescript
+import { createUrlBuilderWith } from "ts-url-builder";
+
+const config = {
+     0: {
+          // These are the queries for the base url
+          name: "" as string, // this is how you type the value of the query param key
+          age: 1 as number, // if number
+          code: true as boolean, // if boolean
+     },
+     1: {
+          timezone: null,
+          countries: {
+               name: "" as string,
+               code: "" as string,
+               // ...
+               search: "" as string,
+               // ...
+          },
+          odds: {
+               fixture: 1 as number,
+               league: 1 as number,
+          },
+     },
+     2: {
+          odds: {
+               // This is the second endpoint
+               live: {
+                    // These are the queries for the second endpoint /odds/live?fixture=123
+                    fixture: 1 as number,
+                    // ...
+                    league: 1 as number,
+                    // ...
+                    bet: 1 as number,
+               },
+               mapping: {
+                    page: 1 as number,
+               },
+               bookmakers: {
+                    id: 1 as number,
+                    search: "" as string,
+               },
+               bets: {
+                    id: 1 as number,
+                    search: "" as string,
+               },
+          },
+     },
+     3: {
+          odds: {
+               live: {
+                    // This is the third endpoint
+                    bets: {
+                         // These are the queries for the third endpoint /odds/live/bets?id=123&search="Param"
+                         id: 1 as number,
+                         search: "" as string,
+                    },
+               },
+          },
+     },
+};
+
+// remember that the baseUrl should not end with slash ("/")
+const urlBuilder = createUrlBuilderWith(config, "http://localhost:3001");
+
+urlBuilder.new().setPath("odds").setPath("live").setQuery("fixture", 123);
 ```
