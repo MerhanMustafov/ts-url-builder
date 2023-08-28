@@ -71,8 +71,10 @@ const config = {
 	}
 };
 ```
-### EXAMPLES:
+
 <br />
+
+### EXAMPLES:
 
 #### Path section
 Read carefully throgh the comments and you will understand the __path section__ of the library and how it works.
