@@ -1,6 +1,6 @@
 {
      "name": "ts-url-builder",
-     "version": "1.0.2",
+     "version": "1.0.3",
      "description": "Strongly typed url builder",
      "author": "Merhan Mustafov",
      "repository": {
