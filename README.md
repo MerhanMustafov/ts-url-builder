@@ -18,6 +18,9 @@ This is a library for url building that brings the best out of __typescript__ an
 
 <br />
 
+## Start immediately playing with the library
+You can skip ahead and jump right to the playing part. Go to the __Template to get you started__ section which is at the end of the documentation and have template code.
+
 ## Get started
 
 - Installation
@@ -212,6 +215,8 @@ import { createUrlBuilderWith } from "ts-url-builder";
 const urlBuilder = createUrlBuilderWith(config);
 urlBuilder.new().setPath("odds").setPath("live").setQuery("fixture", 123).build();
 ```
+
+<br />
 
 ## Template to get you started
 After you have installed the library you can take that code below and start playing with it
