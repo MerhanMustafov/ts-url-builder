@@ -1,27 +1,51 @@
 # ts-url-builder
 <br />
 
-⚠️  ___This liblary is for Typescript projects___
-
+❗ __To get the best out of this library you need to have Typescript in your project else you will NOT have the benefit of typing__
+<br />
+📌 There is __Template code__ section in the documentation, you can use it as a starting point
+<br />
+<br />
 <br />
 
-## Constraints
+# Constraints
 ⬇️ __The url builder supports up to 7 endpoints (including)__ <br />
-⬇️ __Only supports ES6 import/export module__
-
+⬇️ __Only supports ES6 modules (import/export)__
+<br />
+<br />
 <br />
 
-
-## Description
-Welcome to the `ts-url-bulder` documentation !
-This is a library for url building that brings the best out of __typescript__ and combines that with __builder design pattern__ providing you with one of the best yet simple url builder tools out there. With little to no configuration you can start building strongly typed urls.
-
+# Description
+➡️ This is a library that brings the best out of __Typescript__ and combines that with __Builder Design Pattern__ providing you with one of the best yet simple __url builder tools__ out there.
+<br />
+<br />
 <br />
 
-## Start immediately playing with the library
-You can skip ahead and jump right to the playing part. Go to the __Template to get you started__ section which is at the end of the documentation and have template code.
+# Welcome to `ts-url-bulder` documentation !
+<br />
 
-## Get started
+Here you will find everything you need to start building urls with ease and faster than ever. All you have to do is follow this guide that will walk you through the configuration which by the way is quite simple and easy. Once done with the configuration you are going to have an amazing tool that will surely speed up your dev process and reduce or even eliminate any typos you may accidentally make.
+<br />
+
+### What can you do with this tool🤔
+Imagine if you can type your enpoint paths and the queries for each endpoint in such a way that __every next endpoint is typed depending on the previouse one and every endpoint has its own queries__ 🔝.Well, with this library you can do exactly that and on top of that you get __Intellisense__ which means you do not have to memorize or constantly check for the exact endpoint or query params. But that is not all, because the best about this library is that you are creating your urls by chaining methods which is very clean syntax. 
+<br />
+#### Example
+```typescript
+import { createUrlBuilderWith } from "ts-url-builder";
+
+const config = {...}
+
+// config is required and baseUrl is optional
+const urlBuilder = createUrlBuilderWith(config, baseUrl);
+urlBuilder.new().setPath("odds").setPath("live").setQuery("fixture", 123).build();
+```
+#### Cool, right. Ok then, enough talk, let's get started !
+<br />
+<br />
+<br />
+
+# Get started
 
 - Installation
 ```
@@ -31,34 +55,49 @@ You can skip ahead and jump right to the playing part. Go to the __Template to g
 ```typescript
 import { createUrlBuilderWith } from "ts-url-builder";
 ```
+<br />
+
 ## What is `createUrlBuilderWith`
 This is a function that accepts 2 arguments <br />
-1. `config` object which is ___required___
-2. `baseUrl` a string which is ___optional___
+1. `config` object which is __required__
+2. `baseUrl` a string which is __optional__
 <br />
+
 And returns an instance of the url builder.
+```typescript
+const urlBuilder = createUrlBuilderWith(config, baseUrl)
+```
+<br />
 
-## `baseUrl`
+<br />
 
-So lets start with the simple one, the base url. This is just a string passed as __second argument__ to `createUrlBuilderWith` and is __optional__. Given that the constraint is a string it can be anything so make sure that you are passing the right base url. __The only thing you should know is that a base url should NOT end with slash ("/")__.<br />
+### What is `baseUrl` 
+---
+`baseUrl` is just a string passed as __second argument__ to `createUrlBuilderWith` and is __optional__. Given that the 
+constraint is just a string it can be anything so make sure that you are passing the right base url. __The only thing you should know is that a base url should NOT end with 
+slash ("/")__.<br />
 ⚠️ https://localhost:3001/ __is wrong__ <br />
 ⚠️ https://localhost:3001 __is correct__
 
-## `config` object
-`config` is just an object with a specific structure. <br />
-### `config` object Structure
+<br />
+
+### What is `config`
+---
+`config` is just an object but with a specific structrue.
 ```typescript
 const config = {
 	0:{
-		//params of the base url
+		// query params of the base url
 		// ...
 	},
 	1:{
-		//first endpoints
+		// first endpoints and the query params for the endpoints if any
+		// if not just give the enpoint a null value
 		// ...
 	},
 	2: {
-		// second endpoints
+		// second endpoints and the query params for the endpoints if any
+		// if not just give the enpoint a null value
 		// ...
 	},
 	3:{
@@ -71,222 +110,183 @@ const config = {
 	}
 };
 ```
-
+<br />
+<br />
 <br />
 
-### EXAMPLES:
-
-#### Path section
-Read carefully throgh the comments and you will understand the __path section__ of the library and how it works.
-```typescript
-const config = {
-     1: {
-          // In here the keys are the first endpoints
-          // for example
-          // http://localhost:3001/timezone
-          // http://localhost:3001/leagues
-          // ...
-          timezone: null,
-          countries: null,
-          leagues: null,
-          odds: null,
-     },
-     // IMPORTANT! only those paths that have second path should be moved in from 1:{...} to 2:{...}
-     2: {
-          leagues: {
-               // The most inner key is the second endpoint
-               // http://localhost:3001/leagues/seasons
-               seasons: null,
-          },
-         
-          odds: {
-               // The most inner key is the second endpoint
-               // http://localhost:3001/odds/live
-               live: null,
-               mapping: null,
-               bookmakers: null,
-               bets: null,
-          },
-     },
-    // IMPORTANT! only those paths that have third path should be moved in from 2:{...} to 3:{...}
-     3: {
-          odds: {
-               live: {
-                    // The most inner key is the second endpoint
-                    // http://localhost:3001/odds/live/bets
-                    bets: null,
-               },
-          },
-     },
-};
-```
-<br />
-
-#### Query section:
-Read carefully through the comments and you will understand the __query section__ of the library and how it works.
-
-```typescript
-const config = {
-     1: {
-          timezone: null,
-          countries: {
-               // These are the queries for the first endpoint /countries
-               // if you do not have query just give null as value to the countries
-               //http://localhost:3001/countries?name="Joe"
-               name: "" as string,
-               code: "" as string, 
-               // ...
-               search: "" as string, 
-               // ...
-          },
-          odds: {
-               fixture: 1 as number, 
-               league: 1 as number, 
-          },
-     },
-     2: {
-          odds: {
-               // This is the second endpoint
-               live: {
-                    // These are the queries for the second endpoint /odds/live?fixture=123
-                    fixture: 1 as number,
-                    // ...
-                    league: 1 as number,
-                    // ...
-                    bet: 1 as number,
-               },
-               mapping: {
-                    page: 1 as number,
-               },
-               bookmakers: {
-                    id: 1 as number,
-                    search: "" as string,
-               },
-               bets: {
-                    id: 1 as number,
-                    search: "" as string,
-               },
-          },
-     },
-     3: {
-          odds: {
-               live: {
-                    // This is the third endpoint
-                    bets: {
-                         // These are the queries for the third endpoint /odds/live/bets?id=123&search="Param"
-                         id: 1 as number,
-                         search: "" as string,
-                    },
-               },
-          },
-     },
-};
-```
-<br />
-
-#### What about if i have query in my base url
-You need to add 0: {...} inside your config object where you will keep your param keys for the base URL
-
-```typescript
-const config = {
-	0:{
-		// These are the queries for the base url if there are any
-		// If your base URL have a query you need to create 0 key and pass the queries as
-		// key value pairs as shown below
-		// http://localhost:3001?name="Joe"
-		name: "" as string,
-		age: 1 as number
-	},
-     // IMPORTANT! Remember that the createUrlBuilderWith will not work if you do NOT have 1: {...} in the config object
-};
-```
-<br />
-
-## Usage
+# Usage
 When you create the config and pass it to `createUrlBuilderWith(config, baseUrl)` you will get urlBuilder instance. <br />
 The `urlBuilder` instace have 4 methods 
-1. `new` you __should always start with__ `new` method - it resets everything and gives you the opportunity to create one instance and use it wherever you want in your code
-2. `setPath` this sets the path and can be chained up to 7 times (including) if you chain this method more than 7 it will just not work and you will not have a typing
-3. `setQuery` this sets the query for the current path
-4. `build` this is called at the end and returns the url string if the base url is not provided in `createUrlBuilderWith` then tis will return only the endpoint part else it will return the whole URL
+1. `new` you __should always start with__ `new` method - it resets everything and gives you the opportunity to create one instance and use it wherever you want in your code.
+2. `setPath` this sets the path and can be chained up to 7 times (including) if you chain this method more than 7 it will just won't have typing.
+3. `setQuery` this sets the query for the current endpoint.
+4. `build` this is called at the end and returns the url string if the base url is not provided in `createUrlBuilderWith` it will return only the endpoint part.
 
 ##### Example
 ```typescript
 import { createUrlBuilderWith } from "ts-url-builder";
 
-const urlBuilder = createUrlBuilderWith(config);
+const config = {...}
+
+// config is required and baseUrl is optional
+const urlBuilder = createUrlBuilderWith(config, baseUrl);
 urlBuilder.new().setPath("odds").setPath("live").setQuery("fixture", 123).build();
 ```
-
+<br />
+<br />
 <br />
 
-## Template to get you started
-After you have installed the library you can take that code below and start playing with it
+# Advanced usage (Conditionals)
+You can conditionally pass endpoints as well as query params with ternary operators like this:
+```typescript
+const urlBuilder = createUrlBuilderWith(config);
 
+// the condition is hardcoded with true but you can change it to whatever you want
+urlBuilder.new()
+  .setPath(true ? "odds" : "countries") // this is how you can pass conditional endpoints
+  .setPath("live")
+  .setQuery(true ? "fixture" : "bet", 123) // this is how you can pass conditional queries 
+  .setQuery("league", 56).build()
+```
+<br />
+<br />
+<br />
+
+# Template code
+
+Yoy can use this code as tempate to get started. Assuming you have already installed the library you can copy this code and start playing with it.
+There are comments to help you clarify any question that may arise.
 ```typescript
 import { createUrlBuilderWith } from "ts-url-builder";
 
 const config = {
+     // In 0: {...} are the queries for the base url
      0: {
-          // These are the queries for the base url
-          name: "" as string, // this is how you type the value of the query param key
-          age: 1 as number, // if number
-          code: true as boolean, // if boolean
+          // this is how you type the value of the query param key
+          // if you want it to be a string
+          name: "" as string,
+
+          // if you want it to be a number
+          age: 0 as number,
+
+          // if you want it ot be a boolean
+          code: true as boolean,
+
+          // if you want it to be a string but specific once
+          country: "" as "Bulgaria" | "Germany" | "Italy" | "United States",
      },
+
+     // In 1: {...} are the first enpoints and the queries for them if any of course.
      1: {
-          timezone: null,
+          // This is the first endpoint
           countries: {
+               // these are the queries for the /countries endpoint
                name: "" as string,
                code: "" as string,
-               // ...
                search: "" as string,
-               // ...
           },
+
+          // This is the first endpoint
           odds: {
+               // these are the queries for the /odds endpoint
                fixture: 1 as number,
                league: 1 as number,
           },
+
+          // This is the first endpoint
+          // if you do not have queries for an endpoint just give it a null value
+          timezone: null,
      },
+     // In 2: {...} are the second enpoints and the queries for them if any of course.
+     // !!! IMPORTANT: On the first nesting level inside 2: {...}
+     // are the enpoints from 1: {...}
+     // So REMEMBER that only those enpoints that have second path should be here
      2: {
+          // This is the first endpoint's key from 1: {...}
+          countries: {
+               // This is the second endpoint for /countries
+               seasons: {
+                    // these are the queries for the /countries/seasons endpoint
+                    year: 0 as number,
+               },
+          },
+          // This is the first endpoint's key from 1: {...}
           odds: {
-               // This is the second endpoint
+               // This is the second endpoint for /odds
                live: {
-                    // These are the queries for the second endpoint /odds/live?fixture=123
+                    // These are the queries for the second endpoint /odds/live
                     fixture: 1 as number,
-                    // ...
                     league: 1 as number,
-                    // ...
                     bet: 1 as number,
                },
+               // This is the second endpoint for /odds
                mapping: {
+                    // These are the queries for the second endpoint /odds/live
                     page: 1 as number,
                },
+               // This is the second endpoint for /odds
                bookmakers: {
                     id: 1 as number,
                     search: "" as string,
                },
+               // This is the second endpoint for /odds
                bets: {
                     id: 1 as number,
                     search: "" as string,
                },
           },
      },
+     // In 3: {...} are the third enpoints and the queries for them if any of course.
+     // !!! IMPORTANT: On the first nesting level inside 3: {...} are the keys from 1: {...} and on the second
+     // nesting level are the keys from 2: {...}
+     // So REMEMBER that only those enpoints that have third path should be here
      3: {
+          // This is the first endpoint's key from 1: {...}
           odds: {
+               // This is the second endpoint's key from 2: {...}
                live: {
-                    // This is the third endpoint
+                    // This is the third endpoint for /odds/live
                     bets: {
-                         // These are the queries for the third endpoint /odds/live/bets?id=123&search="Param"
+                         // These are the queries for the third endpoint /odds/live/bets
                          id: 1 as number,
                          search: "" as string,
                     },
                },
           },
      },
+     // ...
+     // 7:{...}
+
+     // Summary:
+     // Endpoints
+     // in 0: {...} you keep the base url query params
+     // in 1: {...} you keep the first endpoint and the queries for each endpoint if any
+     // in 2: {...} you keep the second endpoints and the queries for each endpoint if any.
+     // remember that the actual enpoint for second enpoint should come in the second nesting level inside 2: {...}
+     // in 3: {...} you keep the third endpoints and the queries for each endpoint if any.
+     // remember that the actual enpoint for third enpoint should come in the third nesting level inside 3: {...}
+
+     //...
+     // in 7: {...} you keep the seventh endpoints and the queries for each endpoint if any.
+     // remember that the actual enpoint for seventh enpoint should come in the seventh nesting level inside 7: {...}
+     // Queries
+     // - if endpoint does not have queries give the endpoint null value like in the timezone
+     // - How to type the value of a query key
+     // -- if string - "" as string,
+     // -- if number - 0 as number,
+     // -- if boolean - "" as boolean,
+     // -- if specific values - "" as "Bulgaria" | "Germany" | "Italy" | "United States",
+
+     // Constraints
+     // Maxsimum allowed endpoint are 7 (including)
 };
+
 
 // remember that the baseUrl should not end with slash ("/")
 const urlBuilder = createUrlBuilderWith(config, "http://localhost:3001");
 
-urlBuilder.new().setPath("odds").setPath("live").setQuery("fixture", 123);
+urlBuilder.new().setPath("odds").setPath("live").setPath("bets").setQuery("id", 123).build();
 ```
+
+
+
