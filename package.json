@@ -1,7 +1,7 @@
 {
      "name": "ts-url-builder",
-     "version": "1.0.5",
-     "description": "Strongly typed url builder that types every next endpoint path depending on the previouse one and every endpoint has its own queries",
+     "version": "1.0.6",
+     "description": "Strongly typed URL builder that types every next path depending on the previous one and every endpoint has its own queries",
      "author": "Merhan Mustafov",
      "repository": {
           "type": "git",
